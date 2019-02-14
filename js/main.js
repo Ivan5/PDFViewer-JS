@@ -67,12 +67,23 @@ const showNextPage = () => {
 };
 
 //Get Document
-pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
-  pdfDoc = pdfDoc_;
-  document.querySelector("#page-count").textContent = pdfDoc.numPages;
+pdfjsLib
+  .getDocument(url)
+  .promise.then(pdfDoc_ => {
+    pdfDoc = pdfDoc_;
+    document.querySelector("#page-count").textContent = pdfDoc.numPages;
 
-  renderPAge(pageNum);
-});
+    renderPAge(pageNum);
+  })
+  .catch(err => {
+    //display error
+    const div = document.createElement("div");
+    div.className = "error";
+    div.appendChild(document.createTextNode(err.message));
+    document.querySelector("body").insertBefore(div.canvas);
+    //remove top bar
+    document.querySelector(".top-bar").style.display = "none";
+  });
 
 // Button events
 document.querySelector("#prev-page").addEventListener("click", showPrevPage);
